@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SEO Checker</title>
+</head>
+<body>
+    <h1>SEO Checker</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Check Scores and Metrics</button>
+    </form>
+    {% if first_contentful_paint %}
+        <h2>First Contentful Paint: {{ first_contentful_paint }}</h2>
+    {% endif %}
+    {% if largest_contentful_paint %}
+        <h2>Largest Contentful Paint: {{ largest_contentful_paint }}</h2>
+    {% endif %}
+    {% if total_blocking_time %}
+        <h2>Total Blocking Time: {{ total_blocking_time }}</h2>
+    {% endif %}
+    {% if performance_score %}
+    <h2>Performance Score: {{ performance_score }}/100</h2>
+    {% endif %}
+    {% if seo_score %}
+        <h2>SEO Score: {{ seo_score }}/100</h2>
+    {% endif %}
+    {% if best_practice_score %}
+        <h2>Best Practice Score: {{ best_practice_score }}/100</h2>
+    {% endif %}
+    {% if accessibility_score %}
+        <h2>Accessibility Score: {{ accessibility_score }}/100</h2>
+    {% endif %}
+</body>
+</html>
