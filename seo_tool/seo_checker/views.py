@@ -9,11 +9,23 @@ def get_scores_and_metrics(url):
     response = requests.get(lighthouse_url)
     data = response.json()
 
-    # Extract performance metrics and scores
-    performance_score = data['lighthouseResult']['categories']['performance']['score'] * 100
-    seo_score = data['lighthouseResult']['categories']['seo']['score'] * 100
-    best_practice_score = data['lighthouseResult']['categories']['best-practices']['score'] * 100
-    accessibility_score = data['lighthouseResult']['categories']['accessibility']['score'] * 100
+    # Initialize scores with default values (in case data extraction fails)
+    performance_score = 0
+    seo_score = 0
+    best_practice_score = 0
+    accessibility_score = 0
+
+    try:
+        # Extract performance metrics and scores
+        performance_score = data['lighthouseResult']['categories']['performance']['score'] * 100
+        seo_score = data['lighthouseResult']['categories']['seo']['score'] * 100
+        best_practice_score = data['lighthouseResult']['categories']['best-practices']['score'] * 100
+        accessibility_score = data['lighthouseResult']['categories']['accessibility']['score'] * 100
+
+        print(performance_score)
+    except KeyError:
+        # Handle the case where the expected keys are not present in the response
+        pass
 
     return (
         performance_score,
@@ -23,7 +35,7 @@ def get_scores_and_metrics(url):
     )
 
 def seo_checker(request):
-    performance_score =None
+    performance_score = None
     seo_score = None
     best_practice_score = None
     accessibility_score = None
@@ -46,14 +58,14 @@ def seo_checker(request):
                 ) = get_scores_and_metrics(url)
 
                 # Save the scores and metrics to the database
-                page_score.performance_score=performance_score
+                page_score.performance_score = performance_score
                 page_score.seo_score = seo_score
                 page_score.best_practice_score = best_practice_score
                 page_score.accessibility_score = accessibility_score
                 page_score.save()
             else:
                 # If the scores and metrics already exist in the database, use them
-                performance_score =page_score.performance_score
+                performance_score = page_score.performance_score
                 seo_score = page_score.seo_score
                 best_practice_score = page_score.best_practice_score
                 accessibility_score = page_score.accessibility_score
@@ -62,7 +74,7 @@ def seo_checker(request):
 
     return render(request, 'seo_checker/seo_checker.html', {
         'form': form,
-        'performance_score':performance_score,
+        'performance_score': performance_score,
         'seo_score': seo_score,
         'best_practice_score': best_practice_score,
         'accessibility_score': accessibility_score,
