@@ -11,15 +11,6 @@
         {{ form.as_p }}
         <button type="submit">Check Scores and Metrics</button>
     </form>
-    {% if first_contentful_paint %}
-        <h2>First Contentful Paint: {{ first_contentful_paint }}</h2>
-    {% endif %}
-    {% if largest_contentful_paint %}
-        <h2>Largest Contentful Paint: {{ largest_contentful_paint }}</h2>
-    {% endif %}
-    {% if total_blocking_time %}
-        <h2>Total Blocking Time: {{ total_blocking_time }}</h2>
-    {% endif %}
     {% if performance_score %}
     <h2>Performance Score: {{ performance_score }}/100</h2>
     {% endif %}

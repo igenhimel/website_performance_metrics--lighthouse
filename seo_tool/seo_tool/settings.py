@@ -74,13 +74,18 @@ WSGI_APPLICATION = 'seo_tool.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',  # Change 'sqlite3' to 'postgresql'
+        'NAME': 'webMetricDB',  # Replace with your database name
+        'USER': 'superset',  # Replace with your database username
+        'PASSWORD': 'superset',  # Replace with your database password
+        'HOST': 'localhost',  # Change 'localhost' to empty string
+        # Change '5432' to empty string (or change to your PostgreSQL port number if not default)
+        'PORT': '5432',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
