@@ -1,27 +1,62 @@
+<!-- seo_checker.html -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SEO Checker</title>
+    <title>WEB PERFORMANCE CHECKER</title>
 </head>
 <body>
-    <h1>SEO Checker</h1>
+    <h1>WEB PERFORMANCE CHECKER</h1>
+    
+    <!-- Add a form with a button to trigger the view -->
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Check Scores and Metrics</button>
+        <button type="submit">Fetch Scores and Metrics</button>
     </form>
-    {% if performance_score %}
-    <h2>Performance Score: {{ performance_score }}/100</h2>
+
+    <!-- Display new results if available -->
+    {% if results %}
+        <h2>New Results:</h2>
+        <table>
+            <tr>
+                <th>Performance Score</th>
+                <th>SEO Score</th>
+                <th>Best Practice Score</th>
+                <th>Accessibility Score</th>
+            </tr>
+            {% for result in results %}
+                <tr>
+                    <td>{{ result.performance_score }}/100</td>
+                    <td>{{ result.seo_score }}/100</td>
+                    <td>{{ result.best_practice_score }}/100</td>
+                    <td>{{ result.accessibility_score }}/100</td>
+                </tr>
+            {% endfor %}
+        </table>
     {% endif %}
-    {% if seo_score %}
-        <h2>SEO Score: {{ seo_score }}/100</h2>
-    {% endif %}
-    {% if best_practice_score %}
-        <h2>Best Practice Score: {{ best_practice_score }}/100</h2>
-    {% endif %}
-    {% if accessibility_score %}
-        <h2>Accessibility Score: {{ accessibility_score }}/100</h2>
+
+    <!-- Display previous results if available -->
+    {% if previous_results %}
+        <h2>Previous Results:</h2>
+        <table>
+            <tr>
+      
+                <th>Performance Score</th>
+                <th>SEO Score</th>
+                <th>Best Practice Score</th>
+                <th>Accessibility Score</th>
+            </tr>
+            {% for result in previous_results %}
+                <tr>
+                   
+                    <td>{{ result.performance_score }}/100</td>
+                    <td>{{ result.seo_score }}/100</td>
+                    <td>{{ result.best_practice_score }}/100</td>
+                    <td>{{ result.accessibility_score }}/100</td>
+                </tr>
+            {% endfor %}
+        </table>
     {% endif %}
 </body>
 </html>

@@ -1,4 +1,7 @@
+# forms.py
+
 from django import forms
 
 class URLForm(forms.Form):
-    url = forms.URLField(label='Enter URL')
+    # This is an empty form since URLs will be fetched from a JSON file
+    pass
