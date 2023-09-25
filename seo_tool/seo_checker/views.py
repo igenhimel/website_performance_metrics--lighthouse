@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from .models import PageScore,LogMessage
+from .models import PageScore
 import requests
+from django.template import RequestContext
 
 def get_scores_and_metrics(url):
     # Make an HTTP request to the Lighthouse API
@@ -25,8 +26,8 @@ def get_scores_and_metrics(url):
         'accessibility_score': accessibility_score,
     }
 
-def seo_checker(request):
-    if request.method == 'POST':
+def seo_checker():
+       
         # You can retrieve the list of URLs from a JSON file
         # For simplicity, I'll create a list of URLs here
         url_list = [
@@ -66,14 +67,11 @@ def seo_checker(request):
             accessibility_score = result['accessibility_score'],
             )
             page_score.save()
-            log_message = LogMessage(message="Hello message executed")
-            log_message.save()
+            
 
         # Combine previous and new results
         all_results = previous_results + results
-
-        return render(request, 'seo_checker/seo_checker.html', {'results': results, 'previous_results': all_results})
-    else:
-        # Retrieve previous database results for initial rendering
-        previous_results = PageScore.objects.all()
-        return render(request, 'seo_checker/seo_checker.html', {'previous_results': previous_results})
+        
+   
+def printHello():
+    print("Hello Baby")

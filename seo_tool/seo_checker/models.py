@@ -10,11 +10,12 @@ class PageScore(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.url
+        return self.timestamp.strftime("%Y-%m-%d %H:%M:%S")
     
-class LogMessage(models.Model):
-    message = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-       return self.created_at.strftime("%Y-%m-%d %H:%M:%S")
+class JobExecutionLog(models.Model):
+    job_name = models.CharField(max_length=255)
+    start_message = models.TextField(blank=True, null=True)  # New field for start message
+    start_time = models.DateTimeField(auto_now_add=True)
+    finish_time = models.DateTimeField(auto_now_add=True)
+    
