@@ -67,3 +67,5 @@ def cronjob():
             accessibility_score = result['accessibility_score'],
             )
             page_score.save()
+
+

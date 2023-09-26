@@ -3,16 +3,29 @@
 from apscheduler.schedulers.background import BackgroundScheduler
 from django_apscheduler.jobstores import register_events, DjangoJobStore
 from cronjob.views import cronjob
-from cronjob.models import JobExecutionLog, ScheduledJob  # Import your model
-from datetime import datetime  # Import datetime for updating finish_time
+from cronjob.models import JobExecutionLog, ScheduledJob
+from datetime import datetime
 from pytz import timezone
 from datetime import timedelta
 
+scheduler = None
 
-def start():
-    scheduler = BackgroundScheduler()
-    scheduler.add_jobstore(DjangoJobStore(), 'djangojobstore')
-    register_events(scheduler)
+def initialize_scheduler():
+    global scheduler
+    if scheduler is None:
+        scheduler = BackgroundScheduler()
+        scheduler.add_jobstore(DjangoJobStore(), 'djangojobstore')
+        register_events(scheduler)
+
+def start(job_name):
+    global scheduler
+
+    if scheduler is None:
+        initialize_scheduler()
+
+    # Check if the job is already scheduled, if so, return
+    if scheduler.get_job(job_name):
+        return
 
     cron_job_interval = ScheduledJob.objects.first()
 
@@ -22,36 +35,30 @@ def start():
         interval_minutes = 10  # Default value if no interval is found
 
     def page_speed():
-        # Retrieve the interval value from the database
         cron_job_interval = ScheduledJob.objects.first()
 
         if cron_job_interval:
             interval_minutes = cron_job_interval.time_minutes
         else:
-            interval_minutes = 10  # Default value if no interval is found
+            interval_minutes = 10
 
-        # Log the start message
-        start_message = "Job 'page_speed' started."
+        start_message = f"Job '{job_name}' started."
 
-        # Record job execution in the database with start_time
         job_execution_log = JobExecutionLog(
-            job_name='page_speed',
+            job_name=job_name,
             start_message=start_message,
             start_time=datetime.now(timezone('Asia/Dhaka')),
             finish_time=None,
         )
         job_execution_log.save()
 
-        # Execute the cron
         cronjob()
 
-        # Update finish_time when the job finishes
         job_execution_log.finish_time = datetime.now(timezone('Asia/Dhaka'))
         job_execution_log.save()
 
-        # Set the next job interval dynamically
         scheduler.reschedule_job(
-            'page_speed',
+            job_name,
             trigger='interval',
             minutes=interval_minutes,
             next_run_time=datetime.now(timezone('Asia/Dhaka')) + timedelta(minutes=interval_minutes)
@@ -61,8 +68,27 @@ def start():
         page_speed,
         'interval',
         minutes=interval_minutes,
-        id='page_speed',
+        id=job_name,
         next_run_time=datetime.now(timezone('Asia/Dhaka')) + timedelta(minutes=interval_minutes)
     )
 
-    scheduler.start()
+    if not scheduler.running:
+        scheduler.start()
+
+def pause(job_name):
+    global scheduler
+
+    if scheduler is None:
+        initialize_scheduler()
+
+    if scheduler.get_job(job_name):
+        scheduler.pause_job(job_name)
+
+def resume(job_name):
+    global scheduler
+
+    if scheduler is None:
+        initialize_scheduler()
+
+    if scheduler.get_job(job_name):
+        scheduler.resume_job(job_name)
