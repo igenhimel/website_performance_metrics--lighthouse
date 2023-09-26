@@ -27,7 +27,7 @@ def start(job_name):
     if scheduler.get_job(job_name):
         return
 
-    cron_job_interval = ScheduledJob.objects.first()
+    cron_job_interval = ScheduledJob.objects.get(job_name=job_name)
 
     if cron_job_interval:
         interval_minutes = cron_job_interval.time_minutes
@@ -35,7 +35,7 @@ def start(job_name):
         interval_minutes = 10  # Default value if no interval is found
 
     def page_speed():
-        cron_job_interval = ScheduledJob.objects.first()
+        cron_job_interval = ScheduledJob.objects.get(job_name=job_name)
 
         if cron_job_interval:
             interval_minutes = cron_job_interval.time_minutes
