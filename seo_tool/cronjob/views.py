@@ -26,7 +26,7 @@ def get_scores_and_metrics(url):
         'accessibility_score': accessibility_score,
     }
 
-def seo_checker():
+def cronjob():
        
         # You can retrieve the list of URLs from a JSON file
         # For simplicity, I'll create a list of URLs here
@@ -67,11 +67,3 @@ def seo_checker():
             accessibility_score = result['accessibility_score'],
             )
             page_score.save()
-            
-
-        # Combine previous and new results
-        all_results = previous_results + results
-        
-   
-def printHello():
-    print("Hello Baby")

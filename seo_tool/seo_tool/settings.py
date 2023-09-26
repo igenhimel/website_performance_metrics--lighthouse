@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -31,7 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'seo_checker',
+    'cronjob',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -84,7 +85,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',  # Change 'sqlite3' to 'postgresql'
         'NAME': 'webMetricDB',  # Replace with your database name
-        'USER': 'postgres',  # Replace with your database username
+        'USER': 'superset',  # Replace with your database username
         'PASSWORD': 'superset',  # Replace with your database password
         'HOST': 'localhost',  # Change 'localhost' to empty string
         # Change '5432' to empty string (or change to your PostgreSQL port number if not default)
@@ -116,7 +117,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Dhaka'
 
 USE_I18N = True
 

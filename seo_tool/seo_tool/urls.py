@@ -19,5 +19,5 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('seo_checker.urls')),  # Include your app's URLs
+    path('', include('cronjob.urls')),  # Include your app's URLs
 ]

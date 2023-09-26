@@ -19,3 +19,9 @@ class JobExecutionLog(models.Model):
     start_time = models.DateTimeField(auto_now_add=True)
     finish_time = models.DateTimeField(auto_now_add=True)
     
+class ScheduledJob(models.Model):
+    job_name = models.CharField(max_length=255)
+    time_minutes = models.PositiveIntegerField()
+
+    def __str__(self):
+        return self.job_name
