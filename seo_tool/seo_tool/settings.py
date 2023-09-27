@@ -85,7 +85,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',  # Change 'sqlite3' to 'postgresql'
         'NAME': 'webMetricDB',  # Replace with your database name
-        'USER': 'postgres',  # Replace with your database username
+        'USER': 'superset',  # Replace with your database username
         'PASSWORD': 'superset',  # Replace with your database password
         'HOST': 'localhost',  # Change 'localhost' to empty string
         # Change '5432' to empty string (or change to your PostgreSQL port number if not default)

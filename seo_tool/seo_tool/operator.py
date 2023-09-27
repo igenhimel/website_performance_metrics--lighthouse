@@ -2,7 +2,7 @@
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from django_apscheduler.jobstores import register_events, DjangoJobStore
-from cronjob.views import cronjob
+from cronjob.views import cronjob, sum
 from cronjob.models import JobExecutionLog, ScheduledJob
 from datetime import datetime
 from pytz import timezone
@@ -10,12 +10,14 @@ from datetime import timedelta
 
 scheduler = None
 
+
 def initialize_scheduler():
     global scheduler
     if scheduler is None:
         scheduler = BackgroundScheduler()
         scheduler.add_jobstore(DjangoJobStore(), 'djangojobstore')
         register_events(scheduler)
+
 
 def start(job_name):
     global scheduler
@@ -52,7 +54,7 @@ def start(job_name):
         )
         job_execution_log.save()
 
-        cronjob()
+        sum()
 
         job_execution_log.finish_time = datetime.now(timezone('Asia/Dhaka'))
         job_execution_log.save()
@@ -61,19 +63,21 @@ def start(job_name):
             job_name,
             trigger='interval',
             minutes=interval_minutes,
-            next_run_time=datetime.now(timezone('Asia/Dhaka')) + timedelta(minutes=interval_minutes)
-        )
 
+        )
+    next_run_time = datetime.now(
+        timezone('Asia/Dhaka')) + timedelta(minutes=interval_minutes)
     scheduler.add_job(
         page_speed,
         'interval',
         minutes=interval_minutes,
         id=job_name,
-        next_run_time=datetime.now(timezone('Asia/Dhaka')) + timedelta(minutes=interval_minutes)
+        next_run_time=next_run_time
     )
 
     if not scheduler.running:
         scheduler.start()
+
 
 def pause(job_name):
     global scheduler
@@ -83,6 +87,7 @@ def pause(job_name):
 
     if scheduler.get_job(job_name):
         scheduler.pause_job(job_name)
+
 
 def resume(job_name):
     global scheduler
