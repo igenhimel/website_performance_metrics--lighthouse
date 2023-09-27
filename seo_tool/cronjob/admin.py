@@ -12,7 +12,7 @@ job_status_dict = {}
 
 @admin.register(ScheduledJob)
 class ScheduledJobAdmin(admin.ModelAdmin):
-    list_display = ('job_name', 'time_minutes',
+    list_display = ('job_name', 'interval',
                     'status_display', 'action_button')
 
     def status_display(self, obj):
@@ -152,4 +152,4 @@ class ScheduledJobAdmin(admin.ModelAdmin):
 
 @admin.register(JobExecutionLog)
 class JobExecutionLogAdmin(admin.ModelAdmin):
-    list_display = ('job_name', 'start_time', 'finish_time')
+    list_display = ('job_name','message','start_time', 'finish_time')

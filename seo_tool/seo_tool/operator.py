@@ -2,7 +2,7 @@
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from django_apscheduler.jobstores import register_events, DjangoJobStore
-from cronjob.views import cronjob, sum
+from cronjob.views import *
 from cronjob.models import JobExecutionLog, ScheduledJob
 from datetime import datetime
 from pytz import timezone
@@ -32,7 +32,7 @@ def start(job_name):
     cron_job_interval = ScheduledJob.objects.get(job_name=job_name)
 
     if cron_job_interval:
-        interval_minutes = cron_job_interval.time_minutes
+        interval_minutes = cron_job_interval.interval
     else:
         interval_minutes = 10  # Default value if no interval is found
 
@@ -40,21 +40,23 @@ def start(job_name):
         cron_job_interval = ScheduledJob.objects.get(job_name=job_name)
 
         if cron_job_interval:
-            interval_minutes = cron_job_interval.time_minutes
+            interval_minutes = cron_job_interval.interval
         else:
             interval_minutes = 10
 
-        start_message = f"Job '{job_name}' started."
+        start_message = "Started Execution"
 
         job_execution_log = JobExecutionLog(
             job_name=job_name,
-            start_message=start_message,
+            message=start_message,
             start_time=datetime.now(timezone('Asia/Dhaka')),
             finish_time=None,
         )
         job_execution_log.save()
 
-        sum()
+        cronjobs = cron_job_interval.function_name  ##cron_func
+        eval(cronjobs)()
+        
 
         job_execution_log.finish_time = datetime.now(timezone('Asia/Dhaka'))
         job_execution_log.save()
@@ -87,6 +89,15 @@ def pause(job_name):
 
     if scheduler.get_job(job_name):
         scheduler.pause_job(job_name)
+        start_message = "Paused Execution"
+
+        job_execution_log = JobExecutionLog(
+            job_name=job_name,
+            message=start_message,
+            start_time=datetime.now(timezone('Asia/Dhaka')),
+            finish_time=None,
+        )
+        job_execution_log.save()
 
 
 def resume(job_name):
@@ -97,3 +108,12 @@ def resume(job_name):
 
     if scheduler.get_job(job_name):
         scheduler.resume_job(job_name)
+        start_message = "Resumed Execution"
+
+        job_execution_log = JobExecutionLog(
+            job_name=job_name,
+            message=start_message,
+            start_time=datetime.now(timezone('Asia/Dhaka')),
+            finish_time=None,
+        )
+        job_execution_log.save()

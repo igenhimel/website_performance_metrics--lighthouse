@@ -15,13 +15,14 @@ class PageScore(models.Model):
 
 class JobExecutionLog(models.Model):
     job_name = models.CharField(max_length=255)
-    start_message = models.TextField(blank=True, null=True)  # New field for start message
+    message = models.TextField(blank=True, null=True)  # New field for start message
     start_time = models.DateTimeField(auto_now_add=True)
     finish_time = models.DateTimeField(auto_now_add=True)
     
 class ScheduledJob(models.Model):
     job_name = models.CharField(max_length=255)
-    time_minutes = models.PositiveIntegerField()
+    interval = models.PositiveIntegerField()
+    function_name = models.CharField(max_length=255)
 
     def __str__(self):
         return self.job_name
